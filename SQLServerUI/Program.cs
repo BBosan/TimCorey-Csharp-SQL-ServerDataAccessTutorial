@@ -12,7 +12,9 @@ namespace SQLServerUI
         {
             //Console.WriteLine(GetConnectionString());
             SqlCrud sql = new SqlCrud(GetConnectionString());
-            ReadAllContacts(sql);
+            //ReadAllContacts(sql);
+            //ReadContact(sql, 1);
+
             Console.ReadLine(); 
         }
 
@@ -23,6 +25,12 @@ namespace SQLServerUI
             {
                 Console.WriteLine($"{row.Id}: {row.FirstName} {row.LastName}");
             }
+        }
+
+        private static void ReadContact(SqlCrud sql, int contactId)
+        {
+            var contact = sql.GetFullContactById(contactId);
+            Console.WriteLine($"{contact.BasicInfo.Id}: {contact.BasicInfo.FirstName} {contact.BasicInfo.LastName}");
         }
 
         private static string GetConnectionString(string connectionStringName = "Default")

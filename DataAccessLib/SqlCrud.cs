@@ -22,7 +22,7 @@ namespace DataAccessLib
             return db.LoadData<BasicContactModel, dynamic>(sql, new { }, _connectionString);
         }
 
-        public FullContactModel GetFullContactById(string id)
+        public FullContactModel GetFullContactById(int id)
         {
             string sql = "select Id, FirstName, LastName from dbo.Contacts where Id = @Id";
 
