@@ -62,5 +62,7 @@
   <ItemGroup>
     <Build Include="dbo\Tables\Contacts.sql" />
     <Build Include="dbo\Tables\EmailAddresses.sql" />
+    <Build Include="dbo\Tables\PhoneNumbers.sql" />
+    <Build Include="dbo\Tables\ContactEmailTable.sql" />
   </ItemGroup>
 </Project>
