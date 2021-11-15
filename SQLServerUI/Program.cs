@@ -6,6 +6,7 @@ namespace SQLServerUI
     {
         static void Main(string[] args)
         {
+
             Console.ReadLine(); 
         }
     }
