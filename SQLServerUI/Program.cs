@@ -8,7 +8,8 @@ namespace SQLServerUI
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(GetConnectionString());
+            //Console.WriteLine(GetConnectionString());
+
             Console.ReadLine(); 
         }
 
