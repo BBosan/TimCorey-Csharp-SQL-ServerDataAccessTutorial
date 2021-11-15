@@ -14,9 +14,18 @@ namespace DataAccessLib
         {
             using (IDbConnection connection = new SqlConnection(connectionString))
             {
-                List<T> rows = connection.Query<T>(sqlStatement, parameters).ToList();
+                List<T> rows = connection.Query<T>(sqlStatement, parameters).ToList(); //Query is a read
                 return rows;
             }
         }
+
+        public void SaveData<T>(string sqlStatement, T parameters, string connectionString)
+        {
+            using (IDbConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Execute(sqlStatement, parameters); //Execute is a write
+            }
+        }
+
     }
 }
