@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
+using DataAccessLib;
+using DataAccessLib.Models;
 
 namespace SQLServerUI
 {
@@ -9,8 +11,18 @@ namespace SQLServerUI
         static void Main(string[] args)
         {
             //Console.WriteLine(GetConnectionString());
-
+            SqlCrud sql = new SqlCrud(GetConnectionString());
+            ReadAllContacts(sql);
             Console.ReadLine(); 
+        }
+
+        private static void ReadAllContacts(SqlCrud sql)
+        {
+            var rows = sql.GetAllContacts();
+            foreach (var row in rows)
+            {
+                Console.WriteLine($"{row.Id}: {row.FirstName} {row.LastName}");
+            }
         }
 
         private static string GetConnectionString(string connectionStringName = "Default")
