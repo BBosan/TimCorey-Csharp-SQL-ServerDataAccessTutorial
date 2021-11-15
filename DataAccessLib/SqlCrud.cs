@@ -55,5 +55,48 @@ namespace DataAccessLib
             return output;
         }
 
+
+        public void CreateContact(FullContactModel contact)
+        {
+            // Save the basic contact
+            string sql = "insert into dbo.Contact (FirstName, LastName) values (@FirstName, @LastName);";
+            db.SaveData("",
+                new { /*FirstName = */contact.BasicInfo.FirstName, /*LastName = */contact.BasicInfo.LastName },
+                _connectionString
+                );
+
+            // Get the ID number of the contact
+            sql = "select Id from dbo.Contacts where FirstName = @FirstName and LastName = @LastName;";
+            int contactId = db.LoadData<IdLookupModel, dynamic>(sql, new { contact.BasicInfo.FirstName, contact.BasicInfo.LastName }, _connectionString).First().Id;
+
+            foreach (var phonenumber in contact.PhoneNumbers)
+            {
+                if (phonenumber.Id == 0)
+                {
+                    sql = "inser into dbo.PhoneNumbers (PhoneNumber) values (@PhoneNumber);";
+                    db.SaveData(sql, new { phonenumber.PhoneNumber }, _connectionString);
+                    phonenumber.Id = db.LoadData<IdLookupModel, dynamic>(sql, new { phonenumber.PhoneNumber }, _connectionString).First().Id;
+                }
+
+                sql = "insert into dbo.ContactPhoneNumbers (ContactId, PhoneNumberId) values (@ContactId, @PhoneNumberId);";
+                db.SaveData(sql, new { ContactId = contactId, PhoneNumberId = phonenumber.Id }, _connectionString);
+            }
+
+            foreach (var email in contact.EmailAddresses)
+            {
+                if (email.Id == 0)
+                {
+                    sql = "inser into dbo.EmailAddresses (EmailAddress) values (@EmailAddress);";
+                    db.SaveData(sql, new { email.EmailAddress }, _connectionString);
+                    email.Id = db.LoadData<IdLookupModel, dynamic>(sql, new { email.EmailAddress }, _connectionString).First().Id;
+                }
+
+                sql = "insert into dbo.ContactEmail (ContactId, EmailAddressId) values (@ContactId, @EmailAddressId);";
+                db.SaveData(sql, new { ContactId = contactId, EmailAddressId = email.Id }, _connectionString);
+            }
+
+
+        }
+
     }
 }
