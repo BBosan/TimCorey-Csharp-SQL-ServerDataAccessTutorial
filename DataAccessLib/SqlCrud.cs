@@ -39,7 +39,7 @@ namespace DataAccessLib
 
             sql = @"select e.*
                     from dbo.EmailAddresses e
-                    inner join dbo.ContactEmailTable ce on ce.EmailAddressId = e.Id
+                    inner join dbo.ContactEmail ce on ce.EmailAddressId = e.Id
                     where ce.ContactId = @Id";
 
             output.EmailAddresses = db.LoadData<EmailAddressModel, dynamic>(sql, new { Id = id }, _connectionString);
@@ -55,48 +55,54 @@ namespace DataAccessLib
             return output;
         }
 
-
         public void CreateContact(FullContactModel contact)
         {
             // Save the basic contact
-            string sql = "insert into dbo.Contact (FirstName, LastName) values (@FirstName, @LastName);";
-            db.SaveData("",
-                new { /*FirstName = */contact.BasicInfo.FirstName, /*LastName = */contact.BasicInfo.LastName },
-                _connectionString
-                );
+            string sql = "insert into dbo.Contacts (FirstName, LastName) values (@FirstName, @LastName);";
+            db.SaveData(sql,
+                        new { contact.BasicInfo.FirstName, contact.BasicInfo.LastName },
+                        _connectionString);
 
             // Get the ID number of the contact
             sql = "select Id from dbo.Contacts where FirstName = @FirstName and LastName = @LastName;";
-            int contactId = db.LoadData<IdLookupModel, dynamic>(sql, new { contact.BasicInfo.FirstName, contact.BasicInfo.LastName }, _connectionString).First().Id;
+            int contactId = db.LoadData<IdLookupModel, dynamic>(
+                sql,
+                new { contact.BasicInfo.FirstName, contact.BasicInfo.LastName },
+                _connectionString).First().Id;
 
-            foreach (var phonenumber in contact.PhoneNumbers)
+            foreach (var phoneNumber in contact.PhoneNumbers)
             {
-                if (phonenumber.Id == 0)
+                if (phoneNumber.Id == 0)
                 {
-                    sql = "inser into dbo.PhoneNumbers (PhoneNumber) values (@PhoneNumber);";
-                    db.SaveData(sql, new { phonenumber.PhoneNumber }, _connectionString);
-                    phonenumber.Id = db.LoadData<IdLookupModel, dynamic>(sql, new { phonenumber.PhoneNumber }, _connectionString).First().Id;
+                    sql = "insert into dbo.PhoneNumbers (PhoneNumber) values (@PhoneNumber);";
+                    db.SaveData(sql, new { phoneNumber.PhoneNumber }, _connectionString);
+
+                    sql = "select Id from dbo.PhoneNumbers where PhoneNumber = @PhoneNumber;";
+                    phoneNumber.Id = db.LoadData<IdLookupModel, dynamic>(sql,
+                        new { phoneNumber.PhoneNumber },
+                        _connectionString).First().Id;
                 }
 
                 sql = "insert into dbo.ContactPhoneNumbers (ContactId, PhoneNumberId) values (@ContactId, @PhoneNumberId);";
-                db.SaveData(sql, new { ContactId = contactId, PhoneNumberId = phonenumber.Id }, _connectionString);
+                db.SaveData(sql, new { ContactId = contactId, PhoneNumberId = phoneNumber.Id }, _connectionString);
             }
 
             foreach (var email in contact.EmailAddresses)
             {
                 if (email.Id == 0)
                 {
-                    sql = "inser into dbo.EmailAddresses (EmailAddress) values (@EmailAddress);";
+                    sql = "insert into dbo.EmailAddresses (EmailAddress) values (@EmailAddress);";
                     db.SaveData(sql, new { email.EmailAddress }, _connectionString);
+
+                    sql = "select Id from dbo.EmailAddresses where EmailAddress = @EmailAddress;";
                     email.Id = db.LoadData<IdLookupModel, dynamic>(sql, new { email.EmailAddress }, _connectionString).First().Id;
                 }
 
                 sql = "insert into dbo.ContactEmail (ContactId, EmailAddressId) values (@ContactId, @EmailAddressId);";
                 db.SaveData(sql, new { ContactId = contactId, EmailAddressId = email.Id }, _connectionString);
             }
-
-
         }
+
 
     }
 }
