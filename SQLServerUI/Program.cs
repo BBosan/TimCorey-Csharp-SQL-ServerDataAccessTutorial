@@ -20,9 +20,16 @@ namespace SQLServerUI
 
             //UpdateContact(sql);
 
+            RemovePhoneNumberFromContact(sql, 1, 1);
+
             Console.WriteLine("Done processing");
 
             Console.ReadLine();
+        }
+
+        private static void RemovePhoneNumberFromContact(SqlCrud sql, int contactId, int phoneNumberId)
+        {
+            sql.RemovePhoneNumberFromContact(contactId, phoneNumberId);
         }
 
         private static void UpdateContact(SqlCrud sql)
