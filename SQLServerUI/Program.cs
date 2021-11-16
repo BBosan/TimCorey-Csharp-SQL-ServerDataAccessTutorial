@@ -20,7 +20,7 @@ namespace SQLServerUI
 
             //UpdateContact(sql);
 
-            RemovePhoneNumberFromContact(sql, 1, 1);
+            //RemovePhoneNumberFromContact(sql, 2, 3);
 
             Console.WriteLine("Done processing");
 
