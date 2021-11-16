@@ -18,7 +18,7 @@ namespace SQLServerUI
 
             //CreateNewContact(sql);
 
-            UpdateContact(sql);
+            //UpdateContact(sql);
 
             Console.WriteLine("Done processing");
 
@@ -85,7 +85,6 @@ namespace SQLServerUI
 
             return output;
         }
-
 
     }
 }
