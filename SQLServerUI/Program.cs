@@ -20,6 +20,8 @@ namespace SQLServerUI
 
             UpdateContact(sql);
 
+            Console.WriteLine("Done processing");
+
             Console.ReadLine();
         }
 
@@ -31,6 +33,7 @@ namespace SQLServerUI
                 FirstName = "Marko",
                 LastName = "Ivanovic"
             };
+
             sql.UpdateContactName(contact);
         }
 

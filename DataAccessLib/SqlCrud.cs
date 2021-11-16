@@ -105,7 +105,7 @@ namespace DataAccessLib
 
         public void UpdateContactName(BasicContactModel contact)
         {
-            string sql = "update dbo.Contact set FirstName = @FirstName, LastName = @LastName where Id = @Id";
+            string sql = "update dbo.Contacts set FirstName = @FirstName, LastName = @LastName where Id = @Id";
             db.SaveData(sql, contact, _connectionString);
         }
 
