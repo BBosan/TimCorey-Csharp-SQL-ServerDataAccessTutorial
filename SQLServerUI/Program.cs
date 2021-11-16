@@ -13,9 +13,10 @@ namespace SQLServerUI
             //Console.WriteLine(GetConnectionString());
             SqlCrud sql = new SqlCrud(GetConnectionString());
             //ReadAllContacts(sql);
-            //ReadContact(sql, 1);
 
-            CreateNewContact(sql);
+            ReadContact(sql, 2);
+
+            //CreateNewContact(sql);
 
             Console.ReadLine();
         }
