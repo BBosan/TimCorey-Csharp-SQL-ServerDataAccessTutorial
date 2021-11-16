@@ -14,11 +14,24 @@ namespace SQLServerUI
             SqlCrud sql = new SqlCrud(GetConnectionString());
             //ReadAllContacts(sql);
 
-            ReadContact(sql, 2);
+            //ReadContact(sql, 2);
 
             //CreateNewContact(sql);
 
+            UpdateContact(sql);
+
             Console.ReadLine();
+        }
+
+        private static void UpdateContact(SqlCrud sql)
+        {
+            BasicContactModel contact = new BasicContactModel()
+            {
+                Id = 1,
+                FirstName = "Marko",
+                LastName = "Ivanovic"
+            };
+            sql.UpdateContactName(contact);
         }
 
         private static void CreateNewContact(SqlCrud sql)
